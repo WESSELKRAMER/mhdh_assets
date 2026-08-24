@@ -195,6 +195,7 @@ function cleanupTurnstile(container) {
 
 barba.hooks.beforeLeave(data => {
   cleanupTurnstile(data.current.container);
+  closeHamburgerMenu();
 });
 
 barba.hooks.beforeEnter(data => {
@@ -429,6 +430,15 @@ function initHamburgerMenu() {
     toggle.classList.toggle('is--open');
     menu.classList.toggle('is--open');
   });
+}
+
+function closeHamburgerMenu() {
+  const toggle = document.getElementById('hamburgerToggle');
+  const menu = document.getElementById('mobileMenu');
+  if (!toggle || !menu) return;
+
+  toggle.classList.remove('is--open');
+  menu.classList.remove('is--open');
 }
 
 function initDynamicCurrentYear() {
