@@ -7,6 +7,7 @@ let nextPage = document;
 let onceFunctionsInitialized = false;
 let keenSliderInstance = null;
 let imageTrailCleanup = null;
+let modalEscBound = false;
 
 const hasLenis = typeof window.Lenis !== "undefined";
 const hasScrollTrigger = typeof window.ScrollTrigger !== "undefined";
@@ -61,6 +62,7 @@ function initAfterEnterFunctions(data) {
   if (has('[data-draggable-marquee-init]')) initDraggableMarquee();
   if (has('[data-directional-hover]')) initDirectionalListHover();
   if (has('.keen-slider')) keenSliderInstance = initKeenSlider();
+  if (has('[data-modal-target]')) initModalBasic();
   if (has('.faq_item')) initFaqAccordion();
   if (has('.curved_arrow, [data-svg-draw]')) initSvgDraw();
   if (has('[data-wipe-reveal]')) initWipes();
@@ -461,6 +463,48 @@ function initKeenSlider() {
       "(max-width: 479px)": { slides: { perView: 1.1, spacing: 8, origin: "auto" } },
     },
   });
+}
+
+function initModalBasic() {
+  document.querySelectorAll('[data-modal-target]').forEach((modalTarget) => {
+    modalTarget.addEventListener('click', function () {
+      const modalTargetName = this.getAttribute('data-modal-target');
+
+      document.querySelectorAll('[data-modal-target]').forEach((target) => target.setAttribute('data-modal-status', 'not-active'));
+      document.querySelectorAll('[data-modal-name]').forEach((modal) => modal.setAttribute('data-modal-status', 'not-active'));
+
+      document.querySelectorAll(`[data-modal-target="${modalTargetName}"]`).forEach((el) => el.setAttribute('data-modal-status', 'active'));
+      document.querySelector(`[data-modal-name="${modalTargetName}"]`)?.setAttribute('data-modal-status', 'active');
+
+      const modalGroup = document.querySelector('[data-modal-group-status]');
+      if (modalGroup) {
+        modalGroup.setAttribute('data-modal-group-status', 'active');
+      }
+    });
+  });
+
+  document.querySelectorAll('[data-modal-close]').forEach((closeBtn) => {
+    closeBtn.addEventListener('click', closeAllModals);
+  });
+
+  if (!modalEscBound) {
+    modalEscBound = true;
+    document.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') {
+        closeAllModals();
+      }
+    });
+  }
+}
+
+function closeAllModals() {
+  document.querySelectorAll('[data-modal-target]').forEach((target) => target.setAttribute('data-modal-status', 'not-active'));
+  document.querySelectorAll('[data-modal-name]').forEach((modal) => modal.setAttribute('data-modal-status', 'not-active'));
+
+  const modalGroup = document.querySelector('[data-modal-group-status]');
+  if (modalGroup) {
+    modalGroup.setAttribute('data-modal-group-status', 'not-active');
+  }
 }
 
 function initFaqAccordion() {
