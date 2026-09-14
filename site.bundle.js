@@ -480,6 +480,10 @@ function initModalBasic() {
       if (modalGroup) {
         modalGroup.setAttribute('data-modal-group-status', 'active');
       }
+
+      if (hasLenis && lenis) {
+        lenis.stop();
+      }
     });
   });
 
@@ -504,6 +508,10 @@ function closeAllModals() {
   const modalGroup = document.querySelector('[data-modal-group-status]');
   if (modalGroup) {
     modalGroup.setAttribute('data-modal-group-status', 'not-active');
+  }
+
+  if (hasLenis && lenis) {
+    lenis.start();
   }
 }
 
