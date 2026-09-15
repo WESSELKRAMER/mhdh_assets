@@ -102,8 +102,6 @@ function runPageLeaveAnimation(current, next) {
   const transitionPanel = transitionWrap.querySelector("[data-transition-panel]");
   const transitionPanelTop = transitionWrap.querySelector("[data-transition-panel-top]");
   const transitionPanelBottom = transitionWrap.querySelector("[data-transition-panel-bottom]");
-  const transitionLogo = transitionWrap.querySelector("[data-transition-logo]");
-  const transitionLogoPath = transitionWrap.querySelectorAll("path");
 
   const tl = gsap.timeline({
     onComplete: () => { current.remove(); }
@@ -116,19 +114,10 @@ function runPageLeaveAnimation(current, next) {
   tl.set(transitionPanel, { autoAlpha: 1 }, 0);
   tl.set(transitionPanelTop, { scaleY: 0, height: "15vw" }, 0);
   tl.set(transitionPanelBottom, { scaleY: 1, height: "20vw" }, 0);
-  tl.set(transitionLogo, { autoAlpha: 1 });
-  tl.set(transitionLogoPath, { yPercent: 105 });
   tl.set(next, { autoAlpha: 0 }, 0);
 
   tl.fromTo(transitionPanel, { yPercent: 0 }, { yPercent: -100, duration: 1 }, 0);
   tl.fromTo(transitionPanelTop, { scaleY: 0 }, { scaleY: 1, duration: 1 }, "<");
-
-  tl.fromTo(transitionLogoPath, { yPercent: 105 }, {
-    yPercent: 0,
-    duration: 0.8,
-    ease: "expo.out",
-    stagger: { amount: 0.06 }
-  }, "<+=0.4");
 
   tl.fromTo(current, { y: "0vh" }, { y: "-15dvh", duration: 1 }, 0);
 
@@ -139,7 +128,6 @@ function runPageEnterAnimation(next) {
   const transitionWrap = document.querySelector("[data-transition-wrap]");
   const transitionPanel = transitionWrap.querySelector("[data-transition-panel]");
   const transitionPanelBottom = transitionWrap.querySelector("[data-transition-panel-bottom]");
-  const transitionLogoPath = transitionWrap.querySelectorAll("path");
 
   const tl = gsap.timeline();
 
@@ -164,13 +152,6 @@ function runPageEnterAnimation(next) {
   tl.fromTo(transitionPanelBottom, { scaleY: 1 }, { scaleY: 0, duration: 1 }, "<");
 
   tl.set(transitionPanel, { autoAlpha: 0 }, ">");
-
-  tl.to(transitionLogoPath, {
-    yPercent: -130,
-    duration: 1.2,
-    ease: "expo.inOut",
-    stagger: { amount: -0.06 }
-  }, "startEnter-=0.4");
 
   tl.from(next, { y: "25dvh", duration: 1 }, "startEnter");
 
