@@ -60,7 +60,7 @@ function initAfterEnterFunctions(data) {
   if (has('[data-line-reveal]')) init_line_reveal();
   if (has('[data-highlight-text]')) initHighlightText();
   if (has('[data-draggable-marquee-init]')) initDraggableMarquee();
-  if (has('[data-directional-hover]')) initDirectionalListHover();
+  if (has('[data-directional-hover], [data-directional-hover-item]')) initDirectionalListHover();
   if (has('.keen-slider')) keenSliderInstance = initKeenSlider();
   if (has('[data-modal-target]')) initModalBasic();
   if (has('.faq_item')) initFaqAccordion();
@@ -922,7 +922,14 @@ function initDirectionalListHover() {
 
   directionalHoverRegistry = [];
 
-  document.querySelectorAll('[data-directional-hover]').forEach(container => {
+  const explicitContainers = Array.from(document.querySelectorAll('[data-directional-hover]'));
+  const containers = explicitContainers.length
+    ? explicitContainers
+    : Array.from(document.querySelectorAll('[data-directional-hover-item]'))
+        .map(item => item.closest('.directional-list') || item.parentElement)
+        .filter((container, index, all) => container && all.indexOf(container) === index);
+
+  containers.forEach(container => {
     const type = container.getAttribute('data-type') || 'all';
     const breakpoint = parseInt(container.getAttribute('data-directional-hover-breakpoint')) || 991;
     const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
